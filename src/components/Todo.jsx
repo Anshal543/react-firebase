@@ -10,7 +10,7 @@ const style = {
   button: `cursor-pointer flex items-center`,
 };
 
-const Todo = ({ todo, toggleComplete,deleteTodo }) => {
+const Todo = ({ todo, toggleComplete,deleteTodo,updateTodo }) => {
   return (
     <li className={todo.completed ? style.liComplete : style.li}>
       <div className={style.row}>
@@ -26,9 +26,18 @@ const Todo = ({ todo, toggleComplete,deleteTodo }) => {
           {todo.text}
         </p>
       </div>
-      <button onClick={()=>deleteTodo(todo.id)}>{<FaRegTrashAlt />}</button>
-    </li>
+      {/* <button onClick={()=>deleteTodo(todo.id)}>{<FaRegTrashAlt />}</button> */}
+      <div className="flex gap-2">
+        <button onClick={() => updateTodo(todo)} className={style.button}>
+          Update
+        </button>
+        <button onClick={() => deleteTodo(todo.id)} className={style.button}>
+          <FaRegTrashAlt />
+        </button>
+      </div>
+      </li>
   );
 };
 
 export default Todo;
+
