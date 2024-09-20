@@ -22,6 +22,7 @@ import {
 } from "firebase/auth";
 import { useUser } from "../user-context/User-context";
 import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 
 const style = {
   bg: `h-screen p-4 bg-gradient-to-r from-[#2F80ED] to-[#1CB5E0]`,
@@ -34,42 +35,20 @@ const style = {
 };
 
 function Homepage() {
-  const [todos, setTodos] = useState([]);
+  // const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
   const navigate = useNavigate();
 //   const [user, setUser] = useState(null);
-const { user, setUser } = useUser();
+const { user, setUser,todos,setTodos } = useUser();
 
-  const login = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Login failed", error);
-    }
-  };
 
-  // Handle user logout
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-      setTodos([]);
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
-  };
+
 
   if(!user){
     navigate('/login')
   }
 
-//   useEffect(() => {
-//     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-//       setUser(currentUser);
-//     });
-//     return () => unsubscribe();
-//   }, []);
+
 
   // add todo to firebase
 
@@ -85,6 +64,8 @@ const { user, setUser } = useUser();
     });
   };
 
+
+
   // read todos from firebase
   useEffect(() => {
     if (!user) return;
@@ -93,9 +74,9 @@ const { user, setUser } = useUser();
       let todosArr = [];
       querySnapshot.forEach((doc) => {
         todosArr.push({ ...doc.data(), id: doc.id });
-        // console.log({...doc.data(),id:doc.id});
       });
       setTodos(todosArr);
+      console.log("Todos fetched and set in context");
     });
     return () => unsubscribe();
   }, [user]);
